@@ -167,7 +167,7 @@ run_security_check() {
   #echo "${EXTENSIONS_USED[@]}" $(search_extension "${ITEMS_TO_SCAN[@]}")
   if [[ " ${ITEMS_TO_SCAN[*]} " =~ " ${FORCED_EXT} " ]] || [[ $(search_extension "${ITEMS_TO_SCAN[@]}") == "1" ]]; then
     echo -e "${LPURPLE}Found one of: ${RED}"${ITEMS_TO_SCAN[@]}" ${LPURPLE}items in your source dir,${NC} ${GREEN}running $1 ...${NC}"
-    docker build -t "${RUNTIME_CONTAINER_NAME}" -f "${DOCKERFILE_LOCATION}"/"${DOCKERFILE_TO_EXECUTE}" ${DOCKER_EXTRA_ARGS} "${SOURCE_DIR}" > /dev/null
+    docker build -t "${RUNTIME_CONTAINER_NAME}" -f "${DOCKERFILE_LOCATION}"/"${DOCKERFILE_TO_EXECUTE}" ${DOCKER_EXTRA_ARGS} "${SOURCE_DIR}" 
     set +e # the scan will fail the command if it finds any finding. we don't want it to stop our script execution
     docker run --name "${RUNTIME_CONTAINER_NAME}" -v "${CFNRULES_LOCATION}":/cfnrules -v "${UTILS_LOCATION}":/utils -v "${SOURCE_DIR}":/app "${RUNTIME_CONTAINER_NAME}"
     #
