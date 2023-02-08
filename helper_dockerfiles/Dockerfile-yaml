@@ -10,7 +10,7 @@ RUN apt-get update && \
     apt-get install -y ruby-full && \
     rm -rf /var/lib/apt/lists/*
 
-RUN pip3 install -U checkov && gem install cfn-nag
+RUN pip3 install -U checkov -i https://pypi.tuna.tsinghua.edu.cn/simple&& gem install cfn-nag
 WORKDIR /app
 
 CMD bash -C /utils/yaml-docker-execute.sh
