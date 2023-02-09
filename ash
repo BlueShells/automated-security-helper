@@ -162,12 +162,15 @@ run_security_check() {
   local EXTENSIONS_USED=( "${EXTENSIONS_USED[@]}" "$1" )
   local DOCKERFILE_TO_EXECUTE="$1"
   local ITEMS_TO_SCAN=("${@:2}") # take all the array of commands which are the extensions to scan (slice 2nd to end)
-  local RUNTIME_CONTAINER_NAME="scan-$RANDOM"
+  #local RUNTIME_CONTAINER_NAME="scan-$RANDOM"
+  local RUNTIME_CONTAINER_NAME=$(echo "$DOCKERFILE_TO_EXECUTE" | tr '[:upper:]' '[:lower:]')
    # First lets verify this extension even exists in the $SOURCE_DIR directory
   #echo "${EXTENSIONS_USED[@]}" $(search_extension "${ITEMS_TO_SCAN[@]}")
   if [[ " ${ITEMS_TO_SCAN[*]} " =~ " ${FORCED_EXT} " ]] || [[ $(search_extension "${ITEMS_TO_SCAN[@]}") == "1" ]]; then
     echo -e "${LPURPLE}Found one of: ${RED}"${ITEMS_TO_SCAN[@]}" ${LPURPLE}items in your source dir,${NC} ${GREEN}running $1 ...${NC}"
-    docker build -t "${RUNTIME_CONTAINER_NAME}" -f "${DOCKERFILE_LOCATION}"/"${DOCKERFILE_TO_EXECUTE}" ${DOCKER_EXTRA_ARGS} "${SOURCE_DIR}" 
+    
+    #docker build -t "${RUNTIME_CONTAINER_NAME}" -f "${DOCKERFILE_LOCATION}"/"${DOCKERFILE_TO_EXECUTE}" ${DOCKER_EXTRA_ARGS} "${SOURCE_DIR}"
+    docker pull 201504553326.dkr.ecr.cn-north-1.amazonaws.com.cn/"${RUNTIME_CONTAINER_NAME}"
     set +e # the scan will fail the command if it finds any finding. we don't want it to stop our script execution
     docker run --name "${RUNTIME_CONTAINER_NAME}" -v "${CFNRULES_LOCATION}":/cfnrules -v "${UTILS_LOCATION}":/utils -v "${SOURCE_DIR}":/app "${RUNTIME_CONTAINER_NAME}"
     #
