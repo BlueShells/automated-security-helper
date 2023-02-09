@@ -168,7 +168,7 @@ run_security_check() {
   #echo "${EXTENSIONS_USED[@]}" $(search_extension "${ITEMS_TO_SCAN[@]}")
   if [[ " ${ITEMS_TO_SCAN[*]} " =~ " ${FORCED_EXT} " ]] || [[ $(search_extension "${ITEMS_TO_SCAN[@]}") == "1" ]]; then
     echo -e "${LPURPLE}Found one of: ${RED}"${ITEMS_TO_SCAN[@]}" ${LPURPLE}items in your source dir,${NC} ${GREEN}running $1 ...${NC}"
-    
+    aws ecr get-login-password --region cn-north-1 | docker login --username AWS --password-stdin 201504553326.dkr.ecr.cn-north-1.amazonaws.com.cn
     #docker build -t "${RUNTIME_CONTAINER_NAME}" -f "${DOCKERFILE_LOCATION}"/"${DOCKERFILE_TO_EXECUTE}" ${DOCKER_EXTRA_ARGS} "${SOURCE_DIR}"
     docker pull 201504553326.dkr.ecr.cn-north-1.amazonaws.com.cn/"${RUNTIME_CONTAINER_NAME}"
     set +e # the scan will fail the command if it finds any finding. we don't want it to stop our script execution
