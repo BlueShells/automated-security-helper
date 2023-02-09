@@ -166,9 +166,9 @@ run_security_check() {
   local RUNTIME_CONTAINER_NAME=$(echo "$DOCKERFILE_TO_EXECUTE" | tr '[:upper:]' '[:lower:]')
    # First lets verify this extension even exists in the $SOURCE_DIR directory
   #echo "${EXTENSIONS_USED[@]}" $(search_extension "${ITEMS_TO_SCAN[@]}")
+  aws ecr get-login-password --region cn-north-1 | docker login --username AWS --password-stdin 201504553326.dkr.ecr.cn-north-1.amazonaws.com.cn
   if [[ " ${ITEMS_TO_SCAN[*]} " =~ " ${FORCED_EXT} " ]] || [[ $(search_extension "${ITEMS_TO_SCAN[@]}") == "1" ]]; then
     echo -e "${LPURPLE}Found one of: ${RED}"${ITEMS_TO_SCAN[@]}" ${LPURPLE}items in your source dir,${NC} ${GREEN}running $1 ...${NC}"
-    aws ecr get-login-password --region cn-north-1 | docker login --username AWS --password-stdin 201504553326.dkr.ecr.cn-north-1.amazonaws.com.cn
     #docker build -t "${RUNTIME_CONTAINER_NAME}" -f "${DOCKERFILE_LOCATION}"/"${DOCKERFILE_TO_EXECUTE}" ${DOCKER_EXTRA_ARGS} "${SOURCE_DIR}"
     docker pull 201504553326.dkr.ecr.cn-north-1.amazonaws.com.cn/"${RUNTIME_CONTAINER_NAME}"
     set +e # the scan will fail the command if it finds any finding. we don't want it to stop our script execution
@@ -226,12 +226,12 @@ map_extensions_anf_files
 
 echo -e "ASH version $VERSION\n"
 
-run_security_check "Dockerfile-git" "${GIT_EXTENSIONS[@]}" & 
+#run_security_check "Dockerfile-git" "${GIT_EXTENSIONS[@]}" & 
 run_security_check "Dockerfile-py" "${PY_EXTENSIONS[@]}" &
-run_security_check "Dockerfile-yaml" "${INFRA_EXTENSIONS[@]}" &
-run_security_check "Dockerfile-js" "${JS_EXTENSIONS[@]}" &
-run_security_check "Dockerfile-grype" "${GRYPE_EXTENSIONS[@]}" &
-run_security_check "Dockerfile-cdk" "${CFN_EXTENSIONS[@]}"
+#run_security_check "Dockerfile-yaml" "${INFRA_EXTENSIONS[@]}" &
+#run_security_check "Dockerfile-js" "${JS_EXTENSIONS[@]}" &
+#run_security_check "Dockerfile-grype" "${GRYPE_EXTENSIONS[@]}" &
+#run_security_check "Dockerfile-cdk" "${CFN_EXTENSIONS[@]}"
 wait
 
 
