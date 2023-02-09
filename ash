@@ -167,6 +167,8 @@ run_security_check() {
    # First lets verify this extension even exists in the $SOURCE_DIR directory
   #echo "${EXTENSIONS_USED[@]}" $(search_extension "${ITEMS_TO_SCAN[@]}")
   aws ecr get-login-password --region cn-north-1 | docker login --username AWS --password-stdin 201504553326.dkr.ecr.cn-north-1.amazonaws.com.cn
+  cat /root/.docker/config.json
+  aws sts get-caller-identity
   if [[ " ${ITEMS_TO_SCAN[*]} " =~ " ${FORCED_EXT} " ]] || [[ $(search_extension "${ITEMS_TO_SCAN[@]}") == "1" ]]; then
     echo -e "${LPURPLE}Found one of: ${RED}"${ITEMS_TO_SCAN[@]}" ${LPURPLE}items in your source dir,${NC} ${GREEN}running $1 ...${NC}"
     #docker build -t "${RUNTIME_CONTAINER_NAME}" -f "${DOCKERFILE_LOCATION}"/"${DOCKERFILE_TO_EXECUTE}" ${DOCKER_EXTRA_ARGS} "${SOURCE_DIR}"
